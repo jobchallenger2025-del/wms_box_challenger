@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="uuid-fb678f66-f143-40bd-8b84-4a514a3a36b7" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32.43 56.49">
+  <defs>
+    <style>
+      .uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97 {
+        fill: #213c69;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+        stroke-width: .38px;
+      }
+    </style>
+  </defs>
+  <g id="uuid-a0a74334-095e-4c69-9ee6-0a34c75fa022" data-name="Capa 1">
+    <g>
+      <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points=".19 28.95 2.68 30.63 2.98 50.83 .45 49.21 .19 28.95"/>
+      <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="3.24 30.69 22.68 19.89 22.79 39.38 3.53 50.89 3.24 30.69"/>
+      <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points=".51 28.56 2.92 30.15 22.21 19.43 19.33 18.78 .51 28.56"/>
+      <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="3.31 30.52 5.8 32.19 6.1 52.39 3.57 50.77 3.31 30.52"/>
+      <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="6.36 32.25 25.8 21.45 25.91 40.94 6.65 52.45 6.36 32.25"/>
+      <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="3.63 30.12 6.04 31.71 25.33 20.99 22.45 20.34 3.63 30.12"/>
+      <g>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="6.26 32.31 8.75 33.98 9.05 54.19 6.52 52.57 6.26 32.31"/>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="9.31 34.04 28.5 22.98 28.86 42.74 9.6 54.24 9.31 34.04"/>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="6.58 31.92 8.99 33.5 28.46 22.46 25.99 21.5 6.58 31.92"/>
+      </g>
+      <g>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="9.64 34.23 12.13 35.9 12.42 56.1 9.89 54.48 9.64 34.23"/>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="12.69 35.96 31.88 24.9 32.24 44.65 12.98 56.16 12.69 35.96"/>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="9.96 33.84 12.37 35.42 31.84 24.38 29.36 23.42 9.96 33.84"/>
+      </g>
+      <g>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="2.95 9.98 5.44 11.65 5.74 31.85 3.21 30.23 2.95 9.98"/>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="6 11.71 25.3 1.27 25.56 20.98 6.29 31.91 6 11.71"/>
+        <polygon class="uuid-e5e35c8b-4287-4dee-bb7e-87e1cc63fd97" points="3.27 9.59 5.68 11.17 24.97 .81 21.64 .2 3.27 9.59"/>
+      </g>
+    </g>
+  </g>
+</svg>
