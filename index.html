@@ -706,14 +706,27 @@
     }
 
     .image-drop img.preview {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: var(--white);
-      padding: 16px;
+      position: relative;
+      z-index: 1;
       display: none;
+      width: auto;
+      height: auto;
+      max-width: calc(100% - 40px);
+      max-height: calc(100% - 40px);
+      object-fit: contain;
+      object-position: center;
+      background: transparent;
+      padding: 0;
+      margin: auto;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .image-drop.has-image {
+      /* mantiene proporción: la img usa max-width/max-height, no se estira */
+      align-items: center;
+      justify-content: center;
     }
 
     .image-drop.has-image img.preview { display: block; }
@@ -1638,8 +1651,11 @@
         canvas.width = tw;
         canvas.height = th;
         const ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, tw, th);
+        /* Escala uniforme: misma proporción alto/ancho */
         ctx.drawImage(img, 0, 0, tw, th);
         return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
       }
@@ -1777,6 +1793,37 @@
             /* SVG inline puede contaminar el canvas en html2canvas */
             clone.querySelectorAll("svg").forEach((svg) => svg.remove());
             applyExportImagesToClone(clone);
+
+            /* html2canvas distorsiona object-fit: fijar tamaño real del preview */
+            const livePreview = imagePreview;
+            const clonePreview = clone.querySelector("#imagePreview");
+            const drop = clone.querySelector(".image-drop");
+            if (livePreview && clonePreview && drop && livePreview.naturalWidth > 0) {
+              const pad = 40;
+              const boxW = Math.max(1, (drop.clientWidth || drop.offsetWidth || 900) - pad);
+              const boxH = Math.max(1, (drop.clientHeight || drop.offsetHeight || 480) - pad);
+              const nw = livePreview.naturalWidth;
+              const nh = livePreview.naturalHeight;
+              const scale = Math.min(boxW / nw, boxH / nh);
+              const dw = Math.max(1, Math.round(nw * scale));
+              const dh = Math.max(1, Math.round(nh * scale));
+              drop.style.display = "flex";
+              drop.style.alignItems = "center";
+              drop.style.justifyContent = "center";
+              clonePreview.style.position = "relative";
+              clonePreview.style.inset = "auto";
+              clonePreview.style.left = "auto";
+              clonePreview.style.top = "auto";
+              clonePreview.style.transform = "none";
+              clonePreview.style.width = dw + "px";
+              clonePreview.style.height = dh + "px";
+              clonePreview.style.maxWidth = dw + "px";
+              clonePreview.style.maxHeight = dh + "px";
+              clonePreview.style.objectFit = "fill";
+              clonePreview.style.padding = "0";
+              clonePreview.style.margin = "0";
+              clonePreview.style.display = "block";
+            }
             clone.querySelectorAll("*").forEach((el) => {
               el.style.animation = "none";
               el.style.transition = "none";
