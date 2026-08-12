@@ -643,6 +643,8 @@
       background: #ffffff;
       filter: none;
       box-shadow: 0 12px 28px rgba(0, 42, 82, 0.14);
+      overflow: hidden;
+      padding: 0;
     }
 
     .image-drop.has-image::before { display: none; }
@@ -706,30 +708,43 @@
     }
 
     .image-drop img.preview {
-      position: relative;
+      position: absolute;
       z-index: 1;
       display: none;
+      /* Marco interno: siempre dentro del fondo blanco, sin desbordar */
+      inset: 22px;
       width: auto;
       height: auto;
-      max-width: calc(100% - 40px);
-      max-height: calc(100% - 40px);
-      object-fit: contain;
-      object-position: center;
-      background: transparent;
-      padding: 0;
+      max-width: calc(100% - 44px);
+      max-height: calc(100% - 44px);
       margin: auto;
+      object-fit: contain;
+      object-position: center center;
+      background: #ffffff;
+      padding: 0;
+      border-radius: 8px;
       pointer-events: none;
       user-select: none;
       -webkit-user-drag: none;
     }
 
     .image-drop.has-image {
-      /* mantiene proporción: la img usa max-width/max-height, no se estira */
       align-items: center;
       justify-content: center;
     }
 
-    .image-drop.has-image img.preview { display: block; }
+    .image-drop.has-image img.preview {
+      display: block;
+      /* Caja del marco = área útil; contain evita aplastar */
+      left: 22px;
+      right: 22px;
+      top: 22px;
+      bottom: 22px;
+      width: calc(100% - 44px);
+      height: calc(100% - 44px);
+      max-width: none;
+      max-height: none;
+    }
 
     #fileInput { display: none; }
 
@@ -1130,6 +1145,7 @@
     #ficha.capturing .image-drop.has-image {
       background: #ffffff;
       border: 1px solid rgba(0, 60, 113, 0.12);
+      overflow: hidden !important;
     }
     #ficha.capturing .image-drop::before {
       animation: none !important;
@@ -1794,35 +1810,36 @@
             clone.querySelectorAll("svg").forEach((svg) => svg.remove());
             applyExportImagesToClone(clone);
 
-            /* html2canvas distorsiona object-fit: fijar tamaño real del preview */
+            /* html2canvas: dibujar preview en canvas con letterbox blanco (sin deformar) */
             const livePreview = imagePreview;
             const clonePreview = clone.querySelector("#imagePreview");
             const drop = clone.querySelector(".image-drop");
-            if (livePreview && clonePreview && drop && livePreview.naturalWidth > 0) {
-              const pad = 40;
-              const boxW = Math.max(1, (drop.clientWidth || drop.offsetWidth || 900) - pad);
-              const boxH = Math.max(1, (drop.clientHeight || drop.offsetHeight || 480) - pad);
+            if (livePreview && clonePreview && drop && livePreview.naturalWidth > 0 && drop.classList.contains("has-image")) {
+              const pad = 22;
+              const boxW = Math.max(1, Math.round((drop.clientWidth || drop.offsetWidth || 900) - pad * 2));
+              const boxH = Math.max(1, Math.round((drop.clientHeight || drop.offsetHeight || 480) - pad * 2));
               const nw = livePreview.naturalWidth;
               const nh = livePreview.naturalHeight;
               const scale = Math.min(boxW / nw, boxH / nh);
               const dw = Math.max(1, Math.round(nw * scale));
               const dh = Math.max(1, Math.round(nh * scale));
-              drop.style.display = "flex";
-              drop.style.alignItems = "center";
-              drop.style.justifyContent = "center";
-              clonePreview.style.position = "relative";
-              clonePreview.style.inset = "auto";
-              clonePreview.style.left = "auto";
-              clonePreview.style.top = "auto";
-              clonePreview.style.transform = "none";
-              clonePreview.style.width = dw + "px";
-              clonePreview.style.height = dh + "px";
-              clonePreview.style.maxWidth = dw + "px";
-              clonePreview.style.maxHeight = dh + "px";
-              clonePreview.style.objectFit = "fill";
-              clonePreview.style.padding = "0";
-              clonePreview.style.margin = "0";
-              clonePreview.style.display = "block";
+              const c = doc.createElement("canvas");
+              c.width = boxW;
+              c.height = boxH;
+              const ctx = c.getContext("2d");
+              ctx.fillStyle = "#ffffff";
+              ctx.fillRect(0, 0, boxW, boxH);
+              const ox = Math.round((boxW - dw) / 2);
+              const oy = Math.round((boxH - dh) / 2);
+              ctx.imageSmoothingEnabled = true;
+              ctx.imageSmoothingQuality = "high";
+              ctx.drawImage(livePreview, ox, oy, dw, dh);
+              c.setAttribute("aria-hidden", "true");
+              c.style.cssText = "position:absolute;left:" + pad + "px;top:" + pad + "px;width:" + boxW + "px;height:" + boxH + "px;display:block;border-radius:8px;";
+              clonePreview.style.display = "none";
+              drop.style.background = "#ffffff";
+              drop.style.overflow = "hidden";
+              drop.appendChild(c);
             }
             clone.querySelectorAll("*").forEach((el) => {
               el.style.animation = "none";
